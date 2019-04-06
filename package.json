@@ -2,7 +2,16 @@
   "name": "react-fast-masonry",
   "main": "build/static/js/main.js",
   "description": "A fast masonry infinite-scrolling component using the intersection api",
-  "version": "0.1.0",
+  "keywords": [
+    "mit-license",
+    "infinite-scroll",
+    "masonry",
+    "masonry-layout",
+    "react",
+    "react-js",
+    "intersection-observer"
+  ],
+  "version": "0.1.1",
   "license": "MIT",
   "repository": {
     "type": "git",
