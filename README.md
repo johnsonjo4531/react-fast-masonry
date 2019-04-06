@@ -1,10 +1,12 @@
 # react-fast-masonry
 
-A react masonry library featuring infinite-scrolling capabilities using (bricks.js)[http://callmecavs.com/bricks.js/] and (react-intersection list)[https://github.com/researchgate/react-intersection-list]. It's based off (react-masonry-infinite)[https://github.com/skoob13/react-masonry-infinite], but uses react-intersection-list instead of react-infinite-scroll for faster infinite scrolling.
+A react masonry library featuring infinite-scrolling capabilities using [bricks.js](http://callmecavs.com/bricks.js/) and [react-intersection list](https://github.com/researchgate/react-intersection-list). It's based off [react-masonry-infinite](https://github.com/skoob13/react-masonry-infinite), but uses react-intersection-list instead of react-infinite-scroll for faster infinite scrolling.
 
 Since it's based on bricks.js you will need to set all of your items within the masonry container to be the same width.
 
-Checkout the (storybook)[https://johnsonjo4531.github.io/react-fast-masonry/]!
+## Documentation
+
+Checkout the [storybook](https://johnsonjo4531.github.io/react-fast-masonry/)!
 
 ## Contributing
 
