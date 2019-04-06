@@ -9,9 +9,10 @@
     "masonry-layout",
     "react",
     "react-js",
-    "intersection-observer"
+    "intersection-observer",
+    "bricks.js"
   ],
-  "version": "0.4.0",
+  "version": "0.4.2",
   "license": "MIT",
   "repository": {
     "type": "git",

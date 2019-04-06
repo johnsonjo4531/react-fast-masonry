@@ -4,9 +4,49 @@ A react masonry library featuring infinite-scrolling capabilities using [bricks.
 
 Since it's based on bricks.js you will need to set all of your items within the masonry container to be the same width.
 
-## Documentation
+## Installing
 
-Checkout the [storybook](https://johnsonjo4531.github.io/react-fast-masonry/)!
+```sh
+npm i --save react-fast-masonry
+```
+
+If you want to support browsers that don't have the intersection api (at time of writing this includes safari) then install the w3c's polyfill `intersection-observer`.
+
+```sh
+npm i --save intersection-observer
+```
+
+## Usage
+
+First import the library `react-fast-masonry` and optionally the polyfill `intersection-observer`
+
+```jsx
+// The `intersection-observer` import when used must go before `react-fast-masonry`
+// if you decided not to install and include the polyfill comment-out this next line
+import "intersection-observer";
+import MasonryLayout from "react-fast-masonry";
+```
+
+Then use it like so.
+
+```jsx
+<MasonryLayout
+  items={this.state.items}
+  renderItem={this.renderItem}
+  loadMore={this.loadMore}
+  awaitMore={true}
+  pageSize={20}
+  className="masonry"
+/>
+```
+
+A full fledged example of the above might is given as the Simple masonry layout in the [storybook](https://johnsonjo4531.github.io/react-fast-masonry/?selectedKind=FastMasonry&selectedStory=Simple%20masonry%20layout&full=0&addons=0&stories=1&panelRight=0).
+
+````
+
+## Examples & Documentation
+
+Checkout the [storybook](https://johnsonjo4531.github.io/react-fast-masonry/) or this [codesandbox.io](https://codesandbox.io/s/n9mpn054jl)!
 
 ## Contributing
 
@@ -26,7 +66,7 @@ You can use [generator-react-exhibit](generator-react-exhibit) to build your lib
 
 ```sh
 yo react-exhibit my-library
-```
+````
 
 To view your library in action run:
 

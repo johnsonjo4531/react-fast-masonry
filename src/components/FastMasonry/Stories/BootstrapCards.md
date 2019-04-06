@@ -1,4 +1,4 @@
-# Masonry Layout
+# Masonry Layout with Card Components
 
 Below is an example of a masonry layout.
 

@@ -22,8 +22,8 @@ module.exports = function override(config, env) {
   config.plugins = [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new MiniCssExtractPlugin({
-      filename: "static/css/styles.css",
-    }),
+      filename: "static/css/styles.css"
+    })
   ];
   return config;
 };
