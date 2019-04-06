@@ -42,7 +42,7 @@
     "intersection-observer": "^0.5.1",
     "jest-styled-components": "^6.2.2",
     "mini-css-extract-plugin": "^0.4.4",
-    "react-app-rewired": "^1.6.2",
+    "react-app-rewired": "^2.1.1",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-scripts": "^2.1.8",
     "react-test-renderer": "^16.6.3",
