@@ -1,5 +1,5 @@
 import React from "react";
-import MasonryInfiniteScroller from "../FastMasonry";
+import MasonryInfiniteScroller from "../../../index";
 import Card from "react-bootstrap/Card";
 
 export default class RandomMasonryCards extends React.Component {
