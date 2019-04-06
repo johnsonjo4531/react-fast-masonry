@@ -1,0 +1,7 @@
+.masonry {
+	margin: 0 auto;
+}
+
+.masonry > * {
+	width: 300px;
+}
