@@ -2,11 +2,14 @@ import React from "react";
 import MasonryInfiniteScroller from "../../../index";
 import Card from "react-bootstrap/Card";
 
-export default class RandomMasonryCards extends React.Component {
+export default class RandomMasonryCards extends React.Component<
+  {},
+  { items: any[] }
+> {
   constructor(props) {
     super(props);
     this.state = {
-      items: this.randomCardItems()
+      items: this.randomCardItems(),
     };
   }
 
@@ -14,7 +17,7 @@ export default class RandomMasonryCards extends React.Component {
     return new Array(n).fill(0).map(() => this.randomCardItem());
   };
 
-  getCard = item => {
+  getCard = (item) => {
     return cards[item];
   };
 
@@ -29,8 +32,8 @@ export default class RandomMasonryCards extends React.Component {
   };
 
   loadMore = () => {
-    this.setState(state => ({
-      items: [...state.items, ...this.randomCardItems()]
+    this.setState((state) => ({
+      items: [...state.items, ...this.randomCardItems()],
     }));
   };
 
@@ -174,5 +177,5 @@ const cards = [
         </Card.Text>
       </Card.Body>
     </Card>
-  )
+  ),
 ];

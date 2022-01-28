@@ -4,7 +4,6 @@ import React from "react";
 import { withDocs } from "storybook-readme";
 
 import MasonryLayout from "./SimpleMasonry";
-
 import readme from "./SimpleMasonry.md";
 
 storiesOf("FastMasonry", module)

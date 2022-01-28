@@ -2,7 +2,7 @@ import "intersection-observer";
 import React from "react";
 import MasonryLayout from "../../../index";
 
-export default class MyMasonry extends React.Component {
+export default class MyMasonry extends React.Component<{}, { items: any[] }> {
   static defaultStyles = {
     display: "flex",
     justifyContent: "center",
@@ -10,7 +10,7 @@ export default class MyMasonry extends React.Component {
     color: "white",
     fontSize: "24px",
     fontWeight: "bold",
-    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
   };
 
   static colors = [
@@ -22,11 +22,11 @@ export default class MyMasonry extends React.Component {
     "teal",
     "darkcyan",
     "darkseagreen",
-    "coral"
+    "coral",
   ];
 
   state = {
-    items: []
+    items: [] as any[],
   };
 
   randomItems = (n = 20) => {
@@ -34,29 +34,29 @@ export default class MyMasonry extends React.Component {
       width: 300,
       height: this.randomInt(100, 1000),
       backgroundColor:
-        MyMasonry.colors[this.randomInt(0, MyMasonry.colors.length - 1)]
+        MyMasonry.colors[this.randomInt(0, MyMasonry.colors.length - 1)],
     }));
   };
 
-  randomInt = (min, max) => {
+  randomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
   };
 
   loadMore = () => {
-    this.setState(state => ({
-      items: [...state.items, ...this.randomItems()]
+    this.setState((state) => ({
+      items: [...state.items, ...this.randomItems()],
     }));
   };
 
   // `this` must be bound to the render item function in order to use it.
-  renderItem = (index, key) => {
+  renderItem = (index: number, key: any) => {
     return (
       <div
         style={{
           ...this.state.items[index],
-          ...MyMasonry.defaultStyles
+          ...MyMasonry.defaultStyles,
         }}
       >
         {index}
