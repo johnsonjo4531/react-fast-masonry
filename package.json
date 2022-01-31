@@ -1,6 +1,7 @@
 {
   "name": "react-fast-masonry",
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "description": "A fast masonry infinite-scrolling component using the intersection api",
   "keywords": [
     "mit-license",
@@ -12,7 +13,7 @@
     "intersection-observer",
     "bricks.js"
   ],
-  "version": "0.6.3",
+  "version": "0.6.4",
   "license": "MIT",
   "repository": {
     "type": "git",

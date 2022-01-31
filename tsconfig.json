@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "module": "system",                                /* Specify what module code is generated. */
+    "module": "commonjs",                                /* Specify what module code is generated. */
     "moduleResolution": "node",
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
@@ -11,7 +11,7 @@
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     "emitDeclarationOnly": false,
     "declarationMap": true, /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    "outFile": "build/index.js",
+    "outDir": "build",
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["./src/index.ts", "./src/components/FastMasonry/FastMasonry.tsx"],
