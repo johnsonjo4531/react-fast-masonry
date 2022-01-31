@@ -1,7 +1,8 @@
 // started from react-masonry-infinite
 
-import React, { ReactNode, useEffect } from "react";
-import Bricks from "bricks.js";
+import * as React from "react";
+const { useEffect } = React;
+import * as Bricks from "bricks.js";
 import List, { ListProps } from "@researchgate/react-intersection-list";
 
 export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
