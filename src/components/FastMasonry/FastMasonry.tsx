@@ -2,14 +2,17 @@
 
 import React, { useEffect } from "react";
 import Bricks from "bricks.js";
-import List, { ListProps } from "@researchgate/react-intersection-list";
+import List, {
+  IterableType,
+  ListProps,
+} from "@researchgate/react-intersection-list";
+import ListClass from "@researchgate/react-intersection-list";
 
 export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
   items: ItemType[];
   loadMore: () => void;
   onIntersection?: ListProps["onIntersection"];
   renderItem: Required<ListProps>["renderItem"];
-  awaitMore?: boolean;
   className?: string;
   pack?: boolean;
   packedAttribute?: string;
@@ -17,12 +20,11 @@ export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
   sizes?: { columns: number; gutter: number; mq?: string }[];
   style?: React.CSSProperties;
 };
-export const MasonryInfiniteScroller = <T extends any>({
+export const FastMasonry = <T extends any>({
   items,
   renderItem,
   loadMore,
   onIntersection,
-  awaitMore,
   className = "",
   pack = false,
   packedAttribute = "data-packed",
@@ -35,7 +37,7 @@ export const MasonryInfiniteScroller = <T extends any>({
   style = {},
   ...props
 }: MasonryInfiniteScrollerProps<T>) => {
-  const listComponent = React.useRef<React.ReactInstance | null>(null);
+  const listComponent = React.useRef<ListClass | null>(null);
   const masonryContainer = React.useRef<HTMLDivElement | null>(null);
   const [instance, setInstance] = React.useState<Bricks.Instance | null>(null);
 
@@ -94,15 +96,15 @@ export const MasonryInfiniteScroller = <T extends any>({
   }
 
   useEffect(() => {
-    if (masonryContainer.current) {
-      const instance = createNewInstance(masonryContainer.current);
-      return () => {
-        if (instance) {
-          instance.resize(false);
-        }
-      };
+    if (masonryContainer.current !== null && instance === null) {
+      createNewInstance(masonryContainer.current);
     }
-  }, [instance, masonryContainer.current]);
+    return () => {
+      if (instance) {
+        instance.resize(false);
+      }
+    };
+  }, [instance]);
 
   function createNewInstance(container: Node) {
     const instance = Bricks({
@@ -122,33 +124,42 @@ export const MasonryInfiniteScroller = <T extends any>({
     return instance;
   }
 
-  function itemsRenderer(items: any) {
+  function itemsRenderer(
+    items: IterableType,
+    ref: (instance: React.ReactInstance) => void
+  ) {
     return (
-      <div ref={masonryContainer} className={className} style={style}>
+      <div
+        ref={(Ref) => {
+          if (!Ref) return;
+          ref(Ref);
+          masonryContainer.current = Ref;
+        }}
+        className={className}
+        style={style}
+      >
         {items}
       </div>
     );
   }
 
-  function intersection(
+  async function intersection(
     ...args: Parameters<NonNullable<ListProps["onIntersection"]>>
   ) {
     onIntersection && onIntersection(...args);
     if (
-      listComponent &&
-      listComponent.current &&
-      (listComponent.current as any).state &&
-      (listComponent.current as any).state.size >= items.length
+      masonryContainer &&
+      masonryContainer.current &&
+      masonryContainer.current.childNodes &&
+      masonryContainer.current.childNodes.length >= items.length
     ) {
-      return loadMore();
-    } else {
-      forcePack();
+      await loadMore();
     }
+    forcePack();
   }
 
   return (
     <List
-      ref={listComponent as any}
       items={items}
       renderItem={renderItem}
       itemsRenderer={itemsRenderer}
@@ -158,4 +169,4 @@ export const MasonryInfiniteScroller = <T extends any>({
   );
 };
 
-export default MasonryInfiniteScroller;
+export default FastMasonry;

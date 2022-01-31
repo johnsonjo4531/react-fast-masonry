@@ -10,7 +10,7 @@ storiesOf("FastMasonry", module)
   .addParameters({
     readme: {
       // Show readme before story
-      content: readme,
+      // content: readme,
       // Show readme at the addons panel
       sidebar: readme,
     },
