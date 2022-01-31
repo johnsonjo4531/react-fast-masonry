@@ -1,4 +1,2 @@
 **
-!build/*.js
-!build/*.map
-!build/*.d.ts
+!build/**/*
