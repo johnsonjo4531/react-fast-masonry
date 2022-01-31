@@ -9,6 +9,8 @@
     "skipLibCheck": true,
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     "declarationMap": true, /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    "outDir": "build",
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["./src/**/*.ts", "src/components/FastMasonry/Stories/SimpleMasonry.tsx"]
+  "include": ["./src/index.ts", "./src/**/*.tsx"]
 }

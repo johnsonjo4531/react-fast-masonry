@@ -6,7 +6,7 @@ export default class RandomMasonryCards extends React.Component<
   {},
   { items: any[] }
 > {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       items: this.randomCardItems(),
@@ -17,7 +17,7 @@ export default class RandomMasonryCards extends React.Component<
     return new Array(n).fill(0).map(() => this.randomCardItem());
   };
 
-  getCard = (item) => {
+  getCard = (item: number) => {
     return cards[item];
   };
 
@@ -25,7 +25,7 @@ export default class RandomMasonryCards extends React.Component<
     return this.randomInt(0, cards.length - 1);
   };
 
-  randomInt = (min, max) => {
+  randomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
@@ -37,7 +37,7 @@ export default class RandomMasonryCards extends React.Component<
     }));
   };
 
-  renderItem = (index, key) => {
+  renderItem = (index: number, key: any) => {
     const RandomCard = this.getCard(this.state.items[index]);
     return <RandomCard key={key} width={300} />;
   };
@@ -61,7 +61,7 @@ export default class RandomMasonryCards extends React.Component<
 
 ////// ignore this just random card render functions
 const cards = [
-  ({ width }) => (
+  ({ width }: { width: number }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}
@@ -92,7 +92,7 @@ const cards = [
       </blockquote>
     </Card>
   ),
-  ({ width }) => (
+  ({ width }: { width: number }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}
@@ -140,7 +140,7 @@ const cards = [
       </Card.Body>
     </Card>
   ),
-  ({ width }) => (
+  ({ width }: { width: number }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}

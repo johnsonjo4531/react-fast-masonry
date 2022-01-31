@@ -1,6 +1,6 @@
 {
   "name": "react-fast-masonry",
-  "main": "build/static/js/main.js",
+  "main": "build/index.js",
   "description": "A fast masonry infinite-scrolling component using the intersection api",
   "keywords": [
     "mit-license",
@@ -22,7 +22,7 @@
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
     "start": "start-storybook -p 9009 -s public",
-    "build": "react-app-rewired build --library",
+    "build": "react-app-rewired build --library && tsc -p .",
     "build:storybook": "build-storybook -s public",
     "clean": "rm -rf node_modules && npm i",
     "test": "react-scripts test --env=jsdom",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@researchgate/react-intersection-list": "^3.0.2",
     "@types/bricks.js": "^1.8.2",
+    "@types/storybook-readme": "^5.0.5",
     "bricks.js": "^1.8.0",
     "prop-types": "^15.6.2",
     "react": "^17.0.2",
@@ -44,9 +45,9 @@
     "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "@storybook/addon-options": "^4.0.2",
-    "@storybook/react": "^4.0.2",
-    "commitizen": "^3.0.4",
+    "@storybook/addon-options": "^5.3.21",
+    "@storybook/react": "^6.4.17",
+    "commitizen": "^4.2.4",
     "cz-emoji": "^1.1.2",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.14.0",
@@ -55,12 +56,12 @@
     "jest-styled-components": "^7.0.8",
     "mini-css-extract-plugin": "^2.5.3",
     "react-app-rewired": "^2.1.1",
-    "react-bootstrap": "^1.0.0-beta.6",
+    "react-bootstrap": "^2.1.2",
     "react-scripts": "^5.0.0",
     "react-test-renderer": "^17.0.2",
-    "source-map-explorer": "^1.6.0",
-    "storybook-readme": "^4.0.2",
-    "webpack": "^5.67.0"
+    "source-map-explorer": "^2.5.2",
+    "storybook-readme": "^5.0.9",
+    "webpack": "^5.68.0"
   },
   "browserslist": [
     ">0.2%",

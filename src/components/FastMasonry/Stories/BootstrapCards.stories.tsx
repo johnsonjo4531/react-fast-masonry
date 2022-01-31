@@ -10,7 +10,14 @@ import "./style.css";
 import readme from "./BootstrapCards.md";
 
 storiesOf("FastMasonry", module)
-  .addDecorator(withDocs(readme))
+  .addParameters({
+    readme: {
+      // Show readme before story
+      content: readme,
+      // Show readme at the addons panel
+      sidebar: readme,
+    },
+  })
   .add("Masonry layout with bootstrap card components", () => {
     return <MasonryLayout />;
   });
