@@ -4,9 +4,8 @@ import React, { useEffect } from "react";
 import Bricks from "bricks.js";
 import List, {
   IterableType,
-  ListProps,
+  ListProps
 } from "@researchgate/react-intersection-list";
-import ListClass from "@researchgate/react-intersection-list";
 
 export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
   items: ItemType[];
@@ -14,11 +13,27 @@ export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
   onIntersection?: ListProps["onIntersection"];
   renderItem: Required<ListProps>["renderItem"];
   className?: string;
+  outerClassName?: string;
   pack?: boolean;
   packedAttribute?: string;
   position?: boolean;
-  sizes?: { columns: number; gutter: number; mq?: string }[];
+  /** The sizes for columns and gutters at specific container queries */
+  sizes: [
+    {
+      columns: number;
+      gutter: number;
+      /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
+      cq?: number;
+    },
+    ...{
+      columns: number;
+      gutter: number;
+      /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
+      cq?: number;
+    }[]
+  ];
   style?: React.CSSProperties;
+  outerStyle?: React.CSSProperties;
 };
 export const FastMasonry = <T extends any>({
   items,
@@ -29,21 +44,56 @@ export const FastMasonry = <T extends any>({
   pack = false,
   packedAttribute = "data-packed",
   position = true,
-  sizes = [
-    { columns: 1, gutter: 20 },
-    { mq: "768px", columns: 2, gutter: 20 },
-    { mq: "1024px", columns: 3, gutter: 20 },
-  ],
-  style = {},
+  sizes,
+  style = {
+    margin: "0 auto"
+  },
+  outerStyle = {
+    width: "auto !important"
+  },
+  outerClassName = "",
   ...props
 }: MasonryInfiniteScrollerProps<T>) => {
-  const listComponent = React.useRef<ListClass | null>(null);
+  const containerComponent = React.useRef<HTMLDivElement | null>(null);
   const masonryContainer = React.useRef<HTMLDivElement | null>(null);
   const [instance, setInstance] = React.useState<Bricks.Instance | null>(null);
+  const [computedSize, setComputedSize] = React.useState<
+    NonNullable<MasonryInfiniteScrollerProps<any>["sizes"]>[number]
+  >({ columns: 1, gutter: 0 });
+  const [currentSize, setCurrentSize] = React.useState<
+    NonNullable<MasonryInfiniteScrollerProps<any>["sizes"]>[number]
+  >({ columns: 1, gutter: 0 });
+
+  React.useLayoutEffect(() => {
+    if (!containerComponent.current || !sizes) return;
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.contentRect.width) continue;
+        let foundIdx = sizes.findIndex(
+          (size, i) => entry.contentRect.width < (size.cq ?? 0)
+        );
+        if (foundIdx === -1) {
+          foundIdx = sizes.length;
+        }
+        console.log("HERE!", foundIdx, sizes[foundIdx - 1]);
+        setComputedSize({
+          columns: sizes[foundIdx - 1].columns,
+          gutter: sizes[foundIdx - 1].gutter
+        });
+        return;
+      }
+    });
+    resizeObserver.observe(containerComponent.current);
+
+    return () => {
+      if (!containerComponent.current) return;
+      return resizeObserver.unobserve(containerComponent.current);
+    };
+  }, [sizes]);
 
   useEffect(() => {
     handleSentinel();
-  }, []);
+  }, [handleSentinel]);
 
   function handleSentinel() {
     if (
@@ -73,13 +123,10 @@ export const FastMasonry = <T extends any>({
       return;
     }
 
-    if (items.length !== items.length) {
-      if (pack) {
-        instance?.pack();
-      } else {
-        instance?.update();
-      }
-      return;
+    if (pack) {
+      instance?.pack();
+    } else {
+      instance?.update();
     }
   }, [items, instance]);
 
@@ -89,14 +136,14 @@ export const FastMasonry = <T extends any>({
     }
   }
 
-  function forceUpdate() {
-    if (masonryContainer.current) {
-      instance?.update();
-    }
-  }
-
   useEffect(() => {
-    if (masonryContainer.current !== null && instance === null) {
+    if (
+      masonryContainer.current !== null &&
+      (instance === null ||
+        computedSize.cq !== currentSize.cq ||
+        computedSize.columns !== currentSize.columns ||
+        computedSize.gutter !== currentSize.gutter)
+    ) {
       createNewInstance(masonryContainer.current);
     }
     return () => {
@@ -104,21 +151,18 @@ export const FastMasonry = <T extends any>({
         instance.resize(false);
       }
     };
-  }, [instance]);
+  }, [instance, computedSize, createNewInstance]);
 
   function createNewInstance(container: Node) {
     const instance = Bricks({
       container,
       packed: packedAttribute,
-      sizes: sizes,
-      position: position,
+      sizes: [computedSize],
+      position
     });
+    setCurrentSize(computedSize);
 
-    instance.resize(true);
-
-    if (items.length > 0) {
-      instance.pack();
-    }
+    instance.pack();
 
     setInstance(instance);
     return instance;
@@ -128,17 +172,27 @@ export const FastMasonry = <T extends any>({
     items: IterableType,
     ref: (instance: React.ReactInstance) => void
   ) {
+    console.log(items);
     return (
       <div
-        ref={(Ref) => {
+        ref={Ref => {
           if (!Ref) return;
-          ref(Ref);
-          masonryContainer.current = Ref;
+          containerComponent.current = Ref;
         }}
-        className={className}
-        style={style}
+        className={outerClassName}
+        style={outerStyle}
       >
-        {items}
+        <div
+          ref={Ref => {
+            if (!Ref) return;
+            ref(Ref);
+            masonryContainer.current = Ref;
+          }}
+          className={className}
+          style={style}
+        >
+          {items}
+        </div>
       </div>
     );
   }

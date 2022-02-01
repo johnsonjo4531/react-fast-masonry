@@ -1,4 +1,3 @@
-import "intersection-observer";
 import React from "react";
 import MasonryLayout from "../../../index";
 
@@ -10,7 +9,7 @@ export default class MyMasonry extends React.Component<{}, { items: any[] }> {
     color: "white",
     fontSize: "24px",
     fontWeight: "bold",
-    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
   };
 
   static colors = [
@@ -22,42 +21,44 @@ export default class MyMasonry extends React.Component<{}, { items: any[] }> {
     "teal",
     "darkcyan",
     "darkseagreen",
-    "coral",
+    "coral"
   ];
 
   state = {
-    items: [] as any[],
+    items: [] as any[]
   };
 
-  randomItems = (n = 20) => {
-    return new Array(n).fill(0).map(() => ({
+  randomItems = (n = 20) =>
+    new Array(n).fill(0).map(() => ({
       width: 300,
       height: this.randomInt(100, 1000),
       backgroundColor:
-        MyMasonry.colors[this.randomInt(0, MyMasonry.colors.length - 1)],
+        MyMasonry.colors[this.randomInt(0, MyMasonry.colors.length - 1)]
     }));
-  };
 
   randomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+    // The maximum is inclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   loadMore = () => {
-    this.setState((state) => ({
-      items: [...state.items, ...this.randomItems()],
+    this.setState(state => ({
+      items: [...state.items, ...this.randomItems()]
     }));
   };
 
   // `this` must be bound to the render item function in order to use it.
   renderItem = (index: number, key: any) => {
+    console.log(index, key);
     return (
       <div
         style={{
           ...this.state.items[index],
-          ...MyMasonry.defaultStyles,
+          ...MyMasonry.defaultStyles
         }}
+        key={key}
       >
         {index}
       </div>
@@ -67,6 +68,11 @@ export default class MyMasonry extends React.Component<{}, { items: any[] }> {
   render() {
     return (
       <MasonryLayout
+        sizes={[
+          { columns: 1, gutter: 20 },
+          { cq: 768, columns: 2, gutter: 20 },
+          { cq: 1024, columns: 3, gutter: 20 }
+        ]}
         items={this.state.items}
         renderItem={this.renderItem}
         loadMore={this.loadMore}

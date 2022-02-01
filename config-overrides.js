@@ -1,6 +1,5 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
-const webpack = require("webpack");
 const dependencies = Object.keys(require("./package.json").dependencies);
 
 const libraryName = path.basename(process.env.npm_package_name);

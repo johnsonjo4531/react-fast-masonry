@@ -1,7 +1,7 @@
-import { configure, addDecorator } from "@storybook/react";
-import { setOptions } from "@storybook/addon-options";
+const { configure, addDecorator } = require("@storybook/react");
+const { setOptions } = require("@storybook/addon-options");
 const packageSettings = require("../package.json");
-import { addReadme } from 'storybook-readme';
+const { addReadme } = require('storybook-readme');
 
 setOptions({
   name: "react-fast-masonry",

@@ -7,7 +7,18 @@
     "node": true,
     "mocha": true
   },
-  "extends": ["airbnb-base", "react-app", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
+      }
+    }
+  },
+  "plugins": ["eslint-plugin-prettier"],
+  "extends": ["airbnb-base", "react-app", "eslint-config-prettier"],
   "rules": {
     "prettier/prettier": ["error"],
     "template-tag-spacing": "off",
@@ -16,8 +27,7 @@
       "error",
       {
         "devDependencies": [
-          "**/*test.js",
-          "**/*stories.js",
+          "**/Stories/**/*",
           "config-overrides.js"
         ]
       }
@@ -31,10 +41,11 @@
     "padded-blocks": "off",
     "no-shadow": "off",
     "object-curly-newline": "off",
-    "no-tabs": "off",
-    "indent": ["error", "tab"],
+    "indent": ["error", 2],
     "comma-dangle": "off",
-    "arrow-parens": ["warn", "always"],
+    "arrow-parens": "off",
+    "no-continue": "off",
+    "import/extensions": "off",
     "quotes": [
       "warn",
       "double",

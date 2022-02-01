@@ -20,5 +20,5 @@
     "outDir": "build",
     "typeRoots": ["./node_modules/@types", "./src/types"],
   },
-  "include": ["./src/index.ts", "./src/components/FastMasonry/FastMasonry.tsx"],
+  "include": ["./src/index.ts", "./src/components/FastMasonry/FastMasonry.tsx", "./src/**/*"],
 }

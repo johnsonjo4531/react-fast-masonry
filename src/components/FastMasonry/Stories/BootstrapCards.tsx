@@ -1,6 +1,6 @@
 import React from "react";
-import MasonryInfiniteScroller from "../../../index";
 import Card from "react-bootstrap/Card";
+import MasonryInfiniteScroller from "../../../index";
 
 export default class RandomMasonryCards extends React.Component<
   {},
@@ -9,31 +9,27 @@ export default class RandomMasonryCards extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      items: this.randomCardItems(),
+      items: this.randomCardItems()
     };
   }
 
-  randomCardItems = (n = 20) => {
-    return new Array(n).fill(0).map(() => this.randomCardItem());
-  };
+  randomCardItems = (n = 20) =>
+    new Array(n).fill(0).map(() => this.randomCardItem());
 
-  getCard = (item: number) => {
-    return cards[item];
-  };
+  getCard = (item: number) => cards[item];
 
-  randomCardItem = () => {
-    return this.randomInt(0, cards.length - 1);
-  };
+  randomCardItem = () => this.randomInt(0, cards.length - 1);
 
   randomInt = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+    // The maximum is inclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   loadMore = () => {
-    this.setState((state) => ({
-      items: [...state.items, ...this.randomCardItems()],
+    this.setState(state => ({
+      items: [...state.items, ...this.randomCardItems()]
     }));
   };
 
@@ -47,6 +43,12 @@ export default class RandomMasonryCards extends React.Component<
     return (
       <div className="app">
         <MasonryInfiniteScroller
+          sizes={[
+            { columns: 1, gutter: 20 },
+            { cq: 768, columns: 2, gutter: 20 },
+            { cq: 1024, columns: 3, gutter: 20 },
+            { cq: 1368, columns: 4, gutter: 20 }
+          ]}
           items={this.state.items}
           renderItem={this.renderItem}
           loadMore={this.loadMore}
@@ -59,7 +61,7 @@ export default class RandomMasonryCards extends React.Component<
   }
 }
 
-////// ignore this just random card render functions
+/// ignore this just random card render functions
 const cards = [
   ({ width }: { width: number }) => (
     <Card>
@@ -177,5 +179,5 @@ const cards = [
         </Card.Text>
       </Card.Body>
     </Card>
-  ),
+  )
 ];
