@@ -24,7 +24,7 @@ export default class RandomMasonryCards extends React.Component<
   constructor(props: any) {
     super(props);
     this.state = {
-      items: this.randomCardItems(),
+      items: this.randomCardItems()
     };
   }
 
@@ -47,8 +47,8 @@ export default class RandomMasonryCards extends React.Component<
   };
 
   loadMore = () => {
-    this.setState((state) => ({
-      items: [...state.items, ...this.randomCardItems()],
+    this.setState(state => ({
+      items: [...state.items, ...this.randomCardItems()]
     }));
   };
 
@@ -58,14 +58,13 @@ export default class RandomMasonryCards extends React.Component<
   };
 
   render() {
-    console.log(this.state.items);
     return (
       <div className="app">
         <MasonryInfiniteScroller
           sizes={[
             { columns: 1, gutter: 20 },
             { mq: 768, columns: 2, gutter: 20 },
-            { mq: 1024, columns: 3, gutter: 20 },
+            { mq: 1024, columns: 3, gutter: 20 }
           ]}
           items={this.state.items}
           renderItem={this.renderItem}
@@ -197,7 +196,7 @@ const cards = [
         </Card.Text>
       </Card.Body>
     </Card>
-  ),
+  )
 ];
 ```
 

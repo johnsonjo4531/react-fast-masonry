@@ -7,31 +7,31 @@ import List, {
   ListProps
 } from "@researchgate/react-intersection-list";
 
-export type MasonryInfiniteScrollerProps<ItemType> = ListProps & {
+export type MasonrySizing = {
+  columns: number;
+  gutter: number;
+  columnWidth: NonNullable<React.CSSProperties["width"]>;
+  /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
+  cq?: number;
+};
+export type MasonryInfiniteScrollerProps<ItemType> = Omit<
+  ListProps,
+  "renderItem" | "children" | "itemCount"
+> & {
   items: ItemType[];
   loadMore: () => void;
   onIntersection?: ListProps["onIntersection"];
-  renderItem: Required<ListProps>["renderItem"];
+  renderItem: (
+    currentSizing: MasonrySizing,
+    ...args: Parameters<Required<ListProps>["renderItem"]>
+  ) => ReturnType<Required<ListProps>["renderItem"]>;
   className?: string;
   outerClassName?: string;
   pack?: boolean;
   packedAttribute?: string;
   position?: boolean;
   /** The sizes for columns and gutters at specific container queries */
-  sizes: [
-    {
-      columns: number;
-      gutter: number;
-      /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
-      cq?: number;
-    },
-    ...{
-      columns: number;
-      gutter: number;
-      /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
-      cq?: number;
-    }[]
-  ];
+  sizes: [MasonrySizing, ...MasonrySizing[]];
   style?: React.CSSProperties;
   outerStyle?: React.CSSProperties;
 };
@@ -49,7 +49,7 @@ export const FastMasonry = <T extends any>({
     margin: "0 auto"
   },
   outerStyle = {
-    width: "auto !important"
+    width: "100%"
   },
   outerClassName = "",
   ...props
@@ -59,10 +59,10 @@ export const FastMasonry = <T extends any>({
   const [instance, setInstance] = React.useState<Bricks.Instance | null>(null);
   const [computedSize, setComputedSize] = React.useState<
     NonNullable<MasonryInfiniteScrollerProps<any>["sizes"]>[number]
-  >({ columns: 1, gutter: 0 });
+  >({ columns: 1, gutter: 0, columnWidth: 300 });
   const [currentSize, setCurrentSize] = React.useState<
     NonNullable<MasonryInfiniteScrollerProps<any>["sizes"]>[number]
-  >({ columns: 1, gutter: 0 });
+  >({ columns: 1, gutter: 0, columnWidth: 300 });
 
   React.useLayoutEffect(() => {
     if (!containerComponent.current || !sizes) return;
@@ -75,10 +75,10 @@ export const FastMasonry = <T extends any>({
         if (foundIdx === -1) {
           foundIdx = sizes.length;
         }
-        console.log("HERE!", foundIdx, sizes[foundIdx - 1]);
         setComputedSize({
           columns: sizes[foundIdx - 1].columns,
-          gutter: sizes[foundIdx - 1].gutter
+          gutter: sizes[foundIdx - 1].gutter,
+          columnWidth: sizes[foundIdx - 1].columnWidth
         });
         return;
       }
@@ -93,7 +93,7 @@ export const FastMasonry = <T extends any>({
 
   useEffect(() => {
     handleSentinel();
-  }, [handleSentinel]);
+  }, [handleSentinel, computedSize, packedAttribute]);
 
   function handleSentinel() {
     if (
@@ -172,7 +172,6 @@ export const FastMasonry = <T extends any>({
     items: IterableType,
     ref: (instance: React.ReactInstance) => void
   ) {
-    console.log(items);
     return (
       <div
         ref={Ref => {
@@ -180,7 +179,7 @@ export const FastMasonry = <T extends any>({
           containerComponent.current = Ref;
         }}
         className={outerClassName}
-        style={outerStyle}
+        style={Object.assign({}, outerStyle)}
       >
         <div
           ref={Ref => {
@@ -189,7 +188,7 @@ export const FastMasonry = <T extends any>({
             masonryContainer.current = Ref;
           }}
           className={className}
-          style={style}
+          style={Object.assign({ maxWidth: "100%", margin: "0 auto" }, style)}
         >
           {items}
         </div>
@@ -215,7 +214,11 @@ export const FastMasonry = <T extends any>({
   return (
     <List
       items={items}
-      renderItem={renderItem}
+      renderItem={
+        !!renderItem
+          ? (...args) => renderItem(computedSize, ...args)
+          : renderItem
+      }
       itemsRenderer={itemsRenderer}
       onIntersection={intersection}
       {...props}

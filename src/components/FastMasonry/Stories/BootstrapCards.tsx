@@ -33,24 +33,21 @@ export default class RandomMasonryCards extends React.Component<
     }));
   };
 
-  renderItem = (index: number, key: any) => {
-    const RandomCard = this.getCard(this.state.items[index]);
-    return <RandomCard key={key} width={300} />;
-  };
-
   render() {
-    console.log(this.state.items);
     return (
       <div className="app">
         <MasonryInfiniteScroller
           sizes={[
-            { columns: 1, gutter: 20 },
-            { cq: 768, columns: 2, gutter: 20 },
-            { cq: 1024, columns: 3, gutter: 20 },
-            { cq: 1368, columns: 4, gutter: 20 }
+            { columns: 1, gutter: 20, columnWidth: "100%" },
+            { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
+            { cq: 1024, columns: 3, gutter: 20, columnWidth: 300 },
+            { cq: 1368, columns: 4, gutter: 20, columnWidth: 300 }
           ]}
           items={this.state.items}
-          renderItem={this.renderItem}
+          renderItem={({ columnWidth }, index: number, key: any) => {
+            const RandomCard = this.getCard(this.state.items[index]);
+            return <RandomCard key={key} width={columnWidth} />;
+          }}
           loadMore={this.loadMore}
           awaitMore={true}
           pageSize={20}
@@ -63,7 +60,7 @@ export default class RandomMasonryCards extends React.Component<
 
 /// ignore this just random card render functions
 const cards = [
-  ({ width }: { width: number }) => (
+  ({ width }: { width: React.CSSProperties["width"] }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}
@@ -94,7 +91,7 @@ const cards = [
       </blockquote>
     </Card>
   ),
-  ({ width }: { width: number }) => (
+  ({ width }: { width: React.CSSProperties["width"] }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}
@@ -142,7 +139,7 @@ const cards = [
       </Card.Body>
     </Card>
   ),
-  ({ width }: { width: number }) => (
+  ({ width }: { width: React.CSSProperties["width"] }) => (
     <Card>
       <Card.Img
         style={{ width, height: 160 }}

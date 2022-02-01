@@ -49,32 +49,29 @@ export default class MyMasonry extends React.Component<{}, { items: any[] }> {
     }));
   };
 
-  // `this` must be bound to the render item function in order to use it.
-  renderItem = (index: number, key: any) => {
-    console.log(index, key);
-    return (
-      <div
-        style={{
-          ...this.state.items[index],
-          ...MyMasonry.defaultStyles
-        }}
-        key={key}
-      >
-        {index}
-      </div>
-    );
-  };
-
   render() {
     return (
       <MasonryLayout
         sizes={[
-          { columns: 1, gutter: 20 },
-          { cq: 768, columns: 2, gutter: 20 },
-          { cq: 1024, columns: 3, gutter: 20 }
+          { columns: 1, gutter: 0, columnWidth: "100%" },
+          { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
+          { cq: 1024, columns: 3, gutter: 20, columnWidth: 400 }
         ]}
         items={this.state.items}
-        renderItem={this.renderItem}
+        renderItem={({ columnWidth }, index: number, key: any) => {
+          return (
+            <div
+              style={{
+                ...this.state.items[index],
+                ...MyMasonry.defaultStyles,
+                width: columnWidth
+              }}
+              key={key}
+            >
+              {index}
+            </div>
+          );
+        }}
         loadMore={this.loadMore}
         awaitMore={true}
         pageSize={20}
