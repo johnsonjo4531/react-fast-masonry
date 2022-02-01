@@ -10,7 +10,7 @@ import List, {
 export type MasonrySizing = {
   columns: number;
   gutter: number;
-  columnWidth: NonNullable<React.CSSProperties["width"]>;
+  columnWidth?: NonNullable<React.CSSProperties["width"]>;
   /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
   cq?: number;
 };
@@ -179,7 +179,7 @@ export const FastMasonry = <T extends any>({
           containerComponent.current = Ref;
         }}
         className={outerClassName}
-        style={Object.assign({}, outerStyle)}
+        style={{ ...outerStyle }}
       >
         <div
           ref={Ref => {
@@ -188,7 +188,7 @@ export const FastMasonry = <T extends any>({
             masonryContainer.current = Ref;
           }}
           className={className}
-          style={Object.assign({ maxWidth: "100%", margin: "0 auto" }, style)}
+          style={{ maxWidth: "100%", margin: "0 auto", ...style }}
         >
           {items}
         </div>
@@ -214,11 +214,7 @@ export const FastMasonry = <T extends any>({
   return (
     <List
       items={items}
-      renderItem={
-        !!renderItem
-          ? (...args) => renderItem(computedSize, ...args)
-          : renderItem
-      }
+      renderItem={(...args) => renderItem(computedSize, ...args)}
       itemsRenderer={itemsRenderer}
       onIntersection={intersection}
       {...props}

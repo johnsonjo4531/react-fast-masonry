@@ -58,20 +58,18 @@ export default class MyMasonry extends React.Component<{}, { items: any[] }> {
           { cq: 1024, columns: 3, gutter: 20, columnWidth: 400 }
         ]}
         items={this.state.items}
-        renderItem={({ columnWidth }, index: number, key: any) => {
-          return (
-            <div
-              style={{
-                ...this.state.items[index],
-                ...MyMasonry.defaultStyles,
-                width: columnWidth
-              }}
-              key={key}
-            >
-              {index}
-            </div>
-          );
-        }}
+        renderItem={({ columnWidth }, index: number, key: any) => (
+          <div
+            style={{
+              ...this.state.items[index],
+              ...MyMasonry.defaultStyles,
+              width: columnWidth
+            }}
+            key={key}
+          >
+            {index}
+          </div>
+        )}
         loadMore={this.loadMore}
         awaitMore={true}
         pageSize={20}

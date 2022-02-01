@@ -38,15 +38,15 @@ export default class RandomMasonryCards extends React.Component<
       <div className="app">
         <MasonryInfiniteScroller
           sizes={[
-            { columns: 1, gutter: 20, columnWidth: "100%" },
-            { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
-            { cq: 1024, columns: 3, gutter: 20, columnWidth: 300 },
-            { cq: 1368, columns: 4, gutter: 20, columnWidth: 300 }
+            { columns: 1, gutter: 20 },
+            { cq: 768, columns: 2, gutter: 20 },
+            { cq: 1024, columns: 3, gutter: 20 },
+            { cq: 1368, columns: 4, gutter: 20 }
           ]}
           items={this.state.items}
-          renderItem={({ columnWidth }, index: number, key: any) => {
+          renderItem={({}, index: number, key: any) => {
             const RandomCard = this.getCard(this.state.items[index]);
-            return <RandomCard key={key} width={columnWidth} />;
+            return <RandomCard key={key} width={300} />;
           }}
           loadMore={this.loadMore}
           awaitMore={true}
