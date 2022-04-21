@@ -30,7 +30,7 @@
     "test": "react-scripts test --env=jsdom",
     "coverage": "npm run test -- --coverage",
     "deploy": "gh-pages -d storybook-static",
-    "predeploy": "npm run build && build:storybook && npm run build:docs",
+    "predeploy": "npm run build && npm run build:storybook && npm run build:docs",
     "eject": "react-scripts eject",
     "commit": "git-cz",
     "api-report": "api-extractor run",
