@@ -1,5 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+public/storybook
+
 # storybook
 storybook-static
 
@@ -8,6 +10,8 @@ storybook-static
 node_modules
 /.pnp
 .pnp.js
+
+temp/
 
 # testing
 /coverage

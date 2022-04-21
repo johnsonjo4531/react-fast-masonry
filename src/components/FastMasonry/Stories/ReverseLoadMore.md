@@ -1,3 +1,18 @@
+# Simple Masonry Layout
+
+Below is an example of a masonry layout that both loads more above and below itself.
+
+```css
+.masonry {
+  margin: 0 auto;
+}
+
+.masonry > * {
+  width: 300px;
+}
+```
+
+```jsx
 import React from "react";
 import MasonryLayout from "../../../index";
 
@@ -52,7 +67,20 @@ export default function MyMasonry() {
 
   return (
     <div>
+      <div
+        style={{
+          backgroundColor: "#ddd",
+          padding: "0.7em",
+          marginBottom: "1.4em"
+        }}
+        onClick={() => {
+          setItems([...randomItems(), ...items]);
+        }}
+      >
+        Load Previous
+      </div>
       <MasonryLayout
+        pack={true}
         sizes={[
           { columns: 1, gutter: 0, columnWidth: "100%" },
           { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
@@ -81,3 +109,8 @@ export default function MyMasonry() {
     </div>
   );
 }
+
+
+```
+
+<!-- STORY -->

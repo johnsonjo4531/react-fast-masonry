@@ -13,89 +13,88 @@ Below is a simple example of a masonry layout.
 ```
 
 ```jsx
-import "intersection-observer";
 import React from "react";
 import MasonryLayout from "../../../index";
 
-export default class MyMasonry extends React.Component<{}, { items: any[] }> {
-  static defaultStyles = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-    fontSize: "24px",
-    fontWeight: "bold",
-    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-  };
+const defaultStyles = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "white",
+  fontSize: "24px",
+  fontWeight: "bold",
+  fontFamily: `"Helvetica Neue", Helvetica, Arial, sans-serif`
+};
 
-  static colors = [
-    "cornflowerblue",
-    "tomato",
-    "steelblue",
-    "slategrey",
-    "turquoise",
-    "teal",
-    "darkcyan",
-    "darkseagreen",
-    "coral",
-  ];
+const colors = [
+  "cornflowerblue",
+  "tomato",
+  "steelblue",
+  "slategrey",
+  "turquoise",
+  "teal",
+  "darkcyan",
+  "darkseagreen",
+  "coral"
+];
 
-  state = {
-    items: [] as any[],
-  };
+const randomInt = (min: number, max: number) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  // The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
-  randomItems = (n = 20) => {
-    return new Array(n).fill(0).map(() => ({
-      width: 300,
-      height: this.randomInt(100, 1000),
-      backgroundColor:
-        MyMasonry.colors[this.randomInt(0, MyMasonry.colors.length - 1)],
-    }));
-  };
+const randomItems = (n = 20) =>
+  new Array(n).fill(0).map(() => ({
+    width: 300,
+    height: randomInt(100, 1000),
+    backgroundColor: colors[randomInt(0, colors.length - 1)]
+  }));
 
-  randomInt = (min: number, max: number) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
-  };
+const concatRandomItems = (
+  items: any[],
+  type: "prepend" | "append" = "append"
+) => {
+  const randomItemList = randomItems();
+  return type === "append"
+    ? [...items, ...randomItemList]
+    : [...randomItemList, ...items];
+};
 
-  loadMore = () => {
-    this.setState((state) => ({
-      items: [...state.items, ...this.randomItems()],
-    }));
-  };
+export default function MyMasonry() {
+  const [items, setItems] = React.useState([] as any[]);
 
-  // `this` must be bound to the render item function in order to use it.
-  renderItem = (index: number, key: any) => {
-    return (
-      <div
-        style={{
-          ...this.state.items[index],
-          ...MyMasonry.defaultStyles,
-        }}
-      >
-        {index}
-      </div>
-    );
-  };
-
-  render() {
-    return (
+  return (
+    <div>
       <MasonryLayout
         sizes={[
-          { columns: 1, gutter: 20 },
-          { cq: 768, columns: 2, gutter: 20 },
-          { cq: 1024, columns: 3, gutter: 20 },
+          { columns: 1, gutter: 0, columnWidth: "100%" },
+          { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
+          { cq: 1024, columns: 3, gutter: 20, columnWidth: 400 }
         ]}
-        items={this.state.items}
-        renderItem={this.renderItem}
-        loadMore={this.loadMore}
+        items={items}
+        renderItem={({ columnWidth }, index: number, key: any) => (
+          <div
+            style={{
+              ...items[index],
+              ...defaultStyles,
+              width: columnWidth
+            }}
+            key={key}
+          >
+            {index}
+          </div>
+        )}
+        loadMore={() => {
+          setItems([...items, ...randomItems()]);
+        }}
         awaitMore={true}
         pageSize={20}
         className="masonry"
       />
-    );
-  }
+    </div>
+  );
 }
 
 ```

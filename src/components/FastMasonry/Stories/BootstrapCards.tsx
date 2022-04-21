@@ -44,7 +44,7 @@ export default class RandomMasonryCards extends React.Component<
             { cq: 1368, columns: 4, gutter: 20 }
           ]}
           items={this.state.items}
-          renderItem={({}, index: number, key: any) => {
+          renderItem={(_, index: number, key: any) => {
             const RandomCard = this.getCard(this.state.items[index]);
             return <RandomCard key={key} width={300} />;
           }}

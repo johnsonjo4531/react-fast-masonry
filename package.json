@@ -22,16 +22,19 @@
   "homepage": "https://johnsonjo4531.github.io/react-fast-masonry/",
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
-    "start": "start-storybook -p 9009 -s public",
+    "start": "start-storybook -p 9009 -s public/storybook",
     "build": "react-scripts build --library && tsc -p .",
-    "build:storybook": "build-storybook -s public",
+    "build:storybook": "build-storybook -s public/storybook",
+    "build:docs": "yarn build && yarn api-report && yarn api-docs",
     "clean": "rm -rf node_modules && npm i",
     "test": "react-scripts test --env=jsdom",
     "coverage": "npm run test -- --coverage",
     "deploy": "gh-pages -d storybook-static",
-    "predeploy": "npm run build:storybook",
+    "predeploy": "npm run build && build:storybook && npm run build:docs",
     "eject": "react-scripts eject",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "api-report": "api-extractor run",
+    "api-docs": "api-documenter markdown -i temp -o ./public/docs"
   },
   "dependencies": {
     "@researchgate/react-intersection-list": "^3.0.2",
@@ -40,6 +43,8 @@
     "react": "^17.0.2"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.15.3",
+    "@microsoft/api-extractor": "^7.19.4",
     "@storybook/addon-options": "^5.3.21",
     "@storybook/builder-webpack5": "^6.4.17",
     "@storybook/manager-webpack5": "^6.4.17",

@@ -52,7 +52,20 @@ export default function MyMasonry() {
 
   return (
     <div>
+      <div
+        style={{
+          backgroundColor: "#ddd",
+          padding: "0.7em",
+          marginBottom: "1.4em"
+        }}
+        onClick={() => {
+          setItems([...randomItems(), ...items]);
+        }}
+      >
+        Load Previous
+      </div>
       <MasonryLayout
+        pack={true}
         sizes={[
           { columns: 1, gutter: 0, columnWidth: "100%" },
           { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },

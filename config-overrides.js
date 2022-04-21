@@ -9,21 +9,21 @@ const outputDir = "build";
 
 module.exports = {
   webpack: function override(config, env) {
-  config.entry = { [libraryName]: path.resolve(entryFile) };
+    config.entry = { [libraryName]: path.resolve(entryFile) };
 
-  config.output.library = libraryName;
-  config.output.libraryTarget = "umd";
-  config.output.filename = outputFile;
-  config.output.path = path.resolve(__dirname, outputDir);
+    config.output.library = libraryName;
+    config.output.libraryTarget = "umd";
+    config.output.filename = outputFile;
+    config.output.path = path.resolve(__dirname, outputDir);
 
-  config.optimization = {};
-  config.externals = dependencies;
+    config.optimization = {};
+    config.externals = dependencies;
 
-  config.plugins = [
-    new MiniCssExtractPlugin({
-      filename: "static/css/styles.css"
-    })
-  ];
-  return config;
-}
-}
+    config.plugins = [
+      new MiniCssExtractPlugin({
+        filename: "static/css/styles.css"
+      })
+    ];
+    return config;
+  }
+};

@@ -1,4 +1,58 @@
-// started from react-masonry-infinite
+/**
+ * # react-fast-masonry
+ *
+ * A react masonry library featuring infinite-scrolling capabilities using [bricks.js](http://callmecavs.com/bricks.js/) and [react-intersection list](https://github.com/researchgate/react-intersection-list). It's based off [react-masonry-infinite](https://github.com/skoob13/react-masonry-infinite), but uses react-intersection-list instead of react-infinite-scroll for faster infinite scrolling.
+ *
+ * Since it's based on bricks.js you will need to set all of your items within the masonry container to be the same width. What makes this different then bricks.js is it allows container-queries on it's sizing options rather than media queries. It also allows you to set custom widths at those container query breakpoints.
+ *
+ * ## Installing
+ *
+ * ```sh
+ * npm i --save react-fast-masonry
+ * ```
+ *
+ * ## Usage
+ *
+ * First import the library `react-fast-masonry`
+ *
+ * ```jsx
+ * import MasonryLayout from "react-fast-masonry";
+ * ```
+ *
+ * Then use it like so.
+ *
+ * ```jsx
+ * <MasonryLayout
+ *   // This is a required prop this defines how wide your gutters and columns are (required) and optionally provides a way to  define your column-width (columnWidth) and container-queries (cq)
+ *   sizes={[
+ *     { columns: 1, gutter: 0, columnWidth: "100%" },
+ *     { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
+ *     { cq: 1024, columns: 3, gutter: 20, columnWidth: 400 }
+ *   ]}
+ *   items={this.state.items}
+ *   // The columnWidth here comes from the sizes prop up above
+ *   renderItem={({ columnWidth }, index: number, key: any) => (
+ *     <div
+ *       style={{
+ *         width: columnWidth
+ *       }}
+ *       key={key}
+ *     >
+ *       {index}
+ *     </div>
+ *   )}
+ *   loadMore={this.loadMore}
+ *   awaitMore={true}
+ *   pageSize={20}
+ *   className="masonry"
+ * />
+ * ```
+ *
+ * A full fledged example of the above might is given as the Simple masonry layout in the [storybook](https://johnsonjo4531.github.io/react-fast-masonry/?selectedKind=FastMasonry&selectedStory=Simple%20masonry%20layout&full=0&addons=0&stories=1&panelRight=0).
+ *
+ *
+ * @packageDocumentation
+ */
 
 import React, { useEffect } from "react";
 import Bricks from "bricks.js";
@@ -7,13 +61,23 @@ import List, {
   ListProps
 } from "@researchgate/react-intersection-list";
 
+/** Allows the masonry layout to be addjusted at certain container sizes.
+ * @public */
 export type MasonrySizing = {
+  /** The number of columns to display across the container. */
   columns: number;
+  /** The sizing of the space between columns
+   * @public
+   */
   gutter: number;
+  /** The column widths (note they must all be the same width since bricks.js is used) */
   columnWidth?: NonNullable<React.CSSProperties["width"]>;
-  /** The min-width of the surrounding container to apply the columns and gutters. The number will be zero if left off. */
+  /** The min-width of the surrounding container to apply these MasonrySizing constraints. The number will be zero if left off. */
   cq?: number;
 };
+/** The input props to the FastMasonry component
+ *
+ * @public */
 export type MasonryInfiniteScrollerProps<ItemType> = Omit<
   ListProps,
   "renderItem" | "children" | "itemCount"
@@ -35,6 +99,40 @@ export type MasonryInfiniteScrollerProps<ItemType> = Omit<
   style?: React.CSSProperties;
   outerStyle?: React.CSSProperties;
 };
+/** The main Fast Masonry component
+ *
+ * @example
+ * ```tsx
+ *   <MasonryLayout
+ *       sizes={[
+ *         { columns: 1, gutter: 0, columnWidth: "100%" },
+ *         { cq: 768, columns: 2, gutter: 20, columnWidth: 300 },
+ *         { cq: 1024, columns: 3, gutter: 20, columnWidth: 400 }
+ *       ]}
+ *       items={this.state.items}
+ *       renderItem={({ columnWidth }, index: number, key: any) => (
+ *         <div
+ *           style={{
+ *             ...this.state.items[index],
+ *             ...MyMasonry.defaultStyles,
+ *             width: columnWidth
+ *           }}
+ *           key={key}
+ *         >
+ *           {index}
+ *         </div>
+ *       )}
+ *       loadMore={this.loadMore}
+ *       awaitMore={true}
+ *       pageSize={20}
+ *       className="masonry"
+ *     />
+ * ```
+ *
+ * @param props - The functions props
+ *
+ * @public
+ */
 export const FastMasonry = <T extends any>({
   items,
   renderItem,
@@ -91,11 +189,7 @@ export const FastMasonry = <T extends any>({
     };
   }, [sizes]);
 
-  useEffect(() => {
-    handleSentinel();
-  }, [handleSentinel, computedSize, packedAttribute]);
-
-  function handleSentinel() {
+  const handleSentinel = React.useCallback(() => {
     if (
       masonryContainer.current &&
       masonryContainer.current.lastChild &&
@@ -109,7 +203,11 @@ export const FastMasonry = <T extends any>({
       // we must unpack the sentinel or it will not be repositioned.
       masonryContainer.current.lastChild.removeAttribute(packedAttribute);
     }
-  }
+  }, [packedAttribute, masonryContainer]);
+
+  useEffect(() => {
+    handleSentinel();
+  }, [handleSentinel]);
 
   useEffect(() => {
     handleSentinel();
@@ -128,13 +226,31 @@ export const FastMasonry = <T extends any>({
     } else {
       instance?.update();
     }
-  }, [items, instance]);
+  }, [items, instance, handleSentinel, pack]);
 
   function forcePack() {
     if (masonryContainer.current) {
       instance?.pack();
     }
   }
+
+  const createNewInstance = React.useCallback(
+    (container: Node) => {
+      const instance = Bricks({
+        container,
+        packed: packedAttribute,
+        sizes: [computedSize],
+        position
+      });
+      setCurrentSize(computedSize);
+
+      instance.pack();
+
+      setInstance(instance);
+      return instance;
+    },
+    [computedSize, packedAttribute, position]
+  );
 
   useEffect(() => {
     if (
@@ -151,22 +267,16 @@ export const FastMasonry = <T extends any>({
         instance.resize(false);
       }
     };
-  }, [instance, computedSize, createNewInstance]);
-
-  function createNewInstance(container: Node) {
-    const instance = Bricks({
-      container,
-      packed: packedAttribute,
-      sizes: [computedSize],
-      position
-    });
-    setCurrentSize(computedSize);
-
-    instance.pack();
-
-    setInstance(instance);
-    return instance;
-  }
+  }, [
+    instance,
+    createNewInstance,
+    computedSize.cq,
+    computedSize.columns,
+    computedSize.gutter,
+    currentSize.cq,
+    currentSize.columns,
+    currentSize.gutter
+  ]);
 
   function itemsRenderer(
     items: IterableType,
