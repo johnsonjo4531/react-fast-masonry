@@ -10,10 +10,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".ts", ".tsx"]
       }
     }
   },
@@ -26,10 +23,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [
-          "**/Stories/**/*",
-          "config-overrides.js"
-        ]
+        "devDependencies": ["**/Stories/**/*", "config-overrides.js"]
       }
     ],
     "class-methods-use-this": "off",
@@ -50,7 +44,7 @@
       "warn",
       "double",
       {
-        "allowTemplateLiterals": true,
+        "allowTemplateLiterals": true
       }
     ]
   }
