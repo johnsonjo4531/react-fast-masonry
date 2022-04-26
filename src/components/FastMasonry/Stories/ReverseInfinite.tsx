@@ -107,22 +107,28 @@ export default function MyMasonry() {
         )}
         loadMore={() => {
           if (!container.current) return;
+          setItems([...items, ...randomItems()]);
           const masonryEl = container.current.querySelector(".masonry");
           let scrollTarget2 = masonryEl?.lastChild;
           // Get the last HTMLElement (this will grab the sentinel)
-          while (!(scrollTarget2 instanceof HTMLElement)) {
+          while (
+            !(scrollTarget2 instanceof HTMLElement) ||
+            scrollTarget2 === undefined
+          ) {
             scrollTarget2 = scrollTarget2?.previousSibling;
           }
           // Get the last HTMLElement besides the sentinel.
           scrollTarget2 = scrollTarget2?.previousSibling;
-          while (!(scrollTarget2 instanceof HTMLElement)) {
+          while (
+            !(scrollTarget2 instanceof HTMLElement) ||
+            scrollTarget2 === undefined
+          ) {
             scrollTarget2 = scrollTarget2?.previousSibling;
           }
           if (scrollTarget2) {
             setScrollTarget(scrollTarget2);
             console.log({ scrollTarget2 });
           }
-          setItems([...items, ...randomItems()]);
         }}
         awaitMore={true}
         pageSize={20}
